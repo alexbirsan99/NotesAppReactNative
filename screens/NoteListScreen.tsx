@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NoteNetwork from '../utils/NoteNetwork';
-import noteComponent from '../ui_components/NoteComponent';
+import NoteComponent from '../ui_components/NoteComponent';
 
 
 export default class NoteListScreen extends React.Component<{}, any> {
@@ -32,7 +32,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
             <FlatList
                 style = {styles.list}
                 data= {this.state.notesList}
-                renderItem={noteComponent}
+                renderItem={({item}) => <NoteComponent {...item}/>}
                 keyExtractor={item => item.id}
                 numColumns={2}
             />

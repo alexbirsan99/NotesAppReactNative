@@ -13,3 +13,5 @@ abstract class TagNetwork {
         };
     }
 }
+
+export default TagNetwork;
