@@ -1,9 +1,12 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ColorNetwork from '../utils/ColorNetwork';
 import TagNetwork from '../utils/TagNetwork';
 
 class NoteComponent extends React.Component<{}, any> {
+
+
+    onClick = () => { };
 
 
     constructor(props: any) {
@@ -13,6 +16,7 @@ class NoteComponent extends React.Component<{}, any> {
             tag: {} as ITag,
             colorHex: '#f0f0f0'
         }
+        props.onClick ? this.onClick = props.onClick : null;
         this.getTag();
     }
 
@@ -46,7 +50,7 @@ class NoteComponent extends React.Component<{}, any> {
                 backgroundColor: this.state.colorHex,
                 flex: 1
             },
-        
+
             cardTitle: {
                 fontSize: 20,
                 fontWeight: "600"
@@ -56,9 +60,11 @@ class NoteComponent extends React.Component<{}, any> {
 
         return (
             <View style={styles.card}>
-                <Text style={styles.cardTitle}>{this.state.note.title}</Text>
-                <Text>{this.state.tag.name}</Text>
-                <Text>{this.state.note.description}</Text>
+                <TouchableOpacity onPress={this.onClick}>
+                    <Text style={styles.cardTitle}>{this.state.note.title}</Text>
+                    <Text>{this.state.tag.name}</Text>
+                    <Text>{this.state.note.description}</Text>
+                </TouchableOpacity>
             </View>
         );
     }

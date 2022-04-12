@@ -3,12 +3,16 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NoteNetwork from '../utils/NoteNetwork';
 import NoteComponent from '../ui_components/NoteComponent';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default class NoteListScreen extends React.Component<{}, any> {
 
-    constructor(props:any) {
+    navigation: any;
+
+    constructor(props: any) {
         super(props);
+        this.navigation = props.navigation;
         this.getNoteList();
         this.state = {
             notesList: []
@@ -29,13 +33,19 @@ export default class NoteListScreen extends React.Component<{}, any> {
 
     render(): React.ReactNode {
         return (
-            <FlatList
-                style = {styles.list}
-                data= {this.state.notesList}
-                renderItem={({item}) => <NoteComponent {...item}/>}
-                keyExtractor={item => item.id}
-                numColumns={2}
-            />
+            <SafeAreaView>
+                <FlatList
+                    style={styles.list}
+                    data={this.state.notesList}
+                    renderItem={({ item }) =>
+                        <NoteComponent {...item} onClick={() => {
+                            this.navigation.navigate('AddEditNote', {note: item})
+                        }} />
+                    }
+                    keyExtractor={item => item.id}
+                    numColumns={2}
+                />
+            </SafeAreaView>
         );
     }
 
@@ -43,6 +53,10 @@ export default class NoteListScreen extends React.Component<{}, any> {
 
 
 const styles = StyleSheet.create({
+    container: {
+        //flex: 1,
+        backgroundColor: '#fff'
+    },
     list: {
         padding: 16
     }
