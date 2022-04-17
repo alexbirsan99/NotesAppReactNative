@@ -18,15 +18,17 @@ export default class MasonryLayout extends React.Component<{ numColumns: number,
         this.state = {
             transform: this.scrollTransform,
             columnWidth: 0
-        }
+        };
         this.numColumns = props.numColumns;
-        this.data = this.props.data;
         this.renderItem = props.renderItem;
         this.keyExtractor = props.keyExtractor;
     }
 
 
     render(): React.ReactNode {
+
+        this.data = this.props.data;
+
         return (
             <ScrollView style={this.styles.scroll} onLayout={(event) => {
                 this.setState({
@@ -46,7 +48,7 @@ export default class MasonryLayout extends React.Component<{ numColumns: number,
 
         for (let i = 0; i < this.numColumns; i++) {
             columns.push(
-                <View style={{
+                <View key={i} style={{
                     width: this.state.cellWidth,
                     height: '100%',
                     flexDirection: 'column'
@@ -89,13 +91,11 @@ export default class MasonryLayout extends React.Component<{ numColumns: number,
 
     styles = StyleSheet.create({
         scroll: {
-            height: '100%',
             flexDirection: 'row',
             flexWrap: 'wrap'
         },
 
         columnContainer: {
-            height: '100%',
             flexDirection: 'row'
         }
     });

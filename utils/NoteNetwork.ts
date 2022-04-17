@@ -11,6 +11,14 @@ abstract class NoteNetwork {
        }
     }
 
+    static async insertNote(note:INote) {
+        const result = await NetworkRequests.postRequest('createNote/', note);
+        return {
+            note: note,
+            statusCode: result.getStatusCode()
+        }
+    }
+
 }
 
 export default NoteNetwork;

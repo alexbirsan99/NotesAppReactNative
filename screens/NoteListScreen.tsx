@@ -1,17 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NoteNetwork from '../utils/NoteNetwork';
 import NoteComponent from '../ui_components/NoteComponent';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MasonryLayout from '../ui_components/MasonryLayout';
+import FloatingActionButton from '../ui_components/FloatingActionButton';
+import DefaultColors from '../utils/DefaultColors';
+import Entypo from '@expo/vector-icons/build/Entypo';
 
 
 export default class NoteListScreen extends React.Component<{}, any> {
 
     navigation: any;
 
-    noteComponents: JSX.Element[] = [];
+    screenTitle: string;
 
 
     constructor(props: any) {
@@ -21,6 +24,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
         };
         this.navigation = props.navigation;
         this.getNoteList();
+        this.screenTitle = "Noteifyou"
     }
 
     getNoteList = () => {
@@ -34,50 +38,34 @@ export default class NoteListScreen extends React.Component<{}, any> {
         });
     }
 
-    /*<FlatList
-    style={styles.list}
-    data={this.state.notesList}
-    renderItem={({ item }) =>
-        <NoteComponent {...item} onClick={() => {
-            this.navigation.navigate('AddEditNote', {note: item})
-        }} />
-    }
-    keyExtractor={item => item.id}
-    numColumns={2}
-/>*/
-
-
-    /*
-                    <FlatList
-                        style={styles.list}
-                        data={this.state.notesList}
-                        renderItem={({ item }) => {
-                            const newNoteComponent = <NoteComponent marginTop={-60} note = {item}  onClick={() => {
-                                this.navigation.navigate('AddEditNote', { note: item })
-                            }} />
-                            this.noteComponents.push(newNoteComponent);
-                            return newNoteComponent;
-                        }}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
-                    />
-                    */
-
 
     render(): React.ReactNode {
         return (
-            <SafeAreaView>
-                <MasonryLayout
-                    data={this.state.notesList}
-                    keyExtractor = {(item:any) => item.id}
-                    numColumns={2}
-                    renderItem={(item: any) => {
-                        return (
-                            <NoteComponent note={item as INote} onClick={() => {
-                                this.navigation.navigate('AddEditNote')
-                            }} />
-                        )
+            <SafeAreaView style = {{flex: 1}}>
+                <ScrollView>
+                    <Text style={styles.title}>{this.screenTitle}</Text>
+
+
+                    <MasonryLayout
+                        data={this.state.notesList}
+                        keyExtractor={(item: any) => item.id}
+                        numColumns={2}
+                        renderItem={(item: any) => {
+                            return (
+                                <NoteComponent note={item as INote} onClick={(colorHex:string) => {
+                                    this.navigation.navigate('AddEditNote', { note: item, noteColorHex: colorHex })
+                                }} />
+                            )
+                        }}
+                    />
+                </ScrollView>
+
+                <FloatingActionButton
+                    onClick={() => {
+                        this.navigation.navigate('AddEditNote')
                     }}
+                    icon = {<Entypo name="plus" size={24} color={'white'} />}
+                    color={DefaultColors.actionButtonColor}
                 />
             </SafeAreaView>
         );
@@ -88,10 +76,17 @@ export default class NoteListScreen extends React.Component<{}, any> {
 
 const styles = StyleSheet.create({
     container: {
-        //flex: 1,
         backgroundColor: '#fff'
     },
     list: {
         padding: 16
+    },
+    title: {
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+        fontSize: 30,
+        fontWeight: '700'
     }
 })

@@ -1,7 +1,10 @@
-import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Feather, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import FloatingActionButton from '../ui_components/FloatingActionButton';
+import DefaultColors from '../utils/DefaultColors';
+import NoteNetwork from '../utils/NoteNetwork';
 
 export default class AddEditNoteScreen extends React.Component {
 
@@ -9,10 +12,25 @@ export default class AddEditNoteScreen extends React.Component {
 
     navigation:any;
 
+    noteColorHex?:string;
+
     constructor(props: any) {
         super(props);
-        this.note = props.route.params.note;
+        props.route.params && props.route.params.note? this.note = props.route.params.note : this.createEmptyNote();
         this.navigation = props.navigation;
+        props.route.params && props.route.params.noteColorHex ? this.noteColorHex = props.route.params.noteColorHex : null;
+    }
+
+    createEmptyNote() {
+        this.note  = {
+            id: '',
+            title: 'New note',
+            description: '',
+            modifyDate: new Date().toISOString(),
+            createDate: new Date().toISOString(),
+            image: '',
+            tagID: ''
+        }
     }
 
     render(): React.ReactNode {
@@ -21,15 +39,29 @@ export default class AddEditNoteScreen extends React.Component {
                 <TouchableOpacity onPress={() => this.navigation.goBack()}>
                     <View style={styles.topBar}>
                         <Feather name="chevron-left" size={33} color="black" />
-                        <Text style={styles.topBarText}>Notes List</Text>
+                        <Text style={[styles.topBarText]}>Notes List</Text>
                     </View>
                 </TouchableOpacity>
 
 
                 <View style={styles.screenContent}>
-                    <TextInput style={styles.title}>{this.note.title}</TextInput>
-                    <TextInput style={styles.body} multiline={true}>{this.note.description}</TextInput>
+                    <TextInput onChangeText={(text) => this.note.title = text} style={[styles.title, {color: this.noteColorHex}]}>{this.note.title}</TextInput>
+                    <TextInput onChangeText={(text) => this.note.description = text} style={[styles.body, {color: this.noteColorHex}]} multiline={true} placeholder = "Note description...">{this.note.description}</TextInput>
                 </View>
+
+
+                <FloatingActionButton
+                    onClick={() => {
+                        if(this.note.id) {
+
+                        } else {
+                            this.note.image = '';
+                            NoteNetwork.insertNote(this.note);
+                        }
+                    }}
+                    icon = {<FontAwesome5 name="edit" size={24} color='white' />}
+                    color={'black'}
+                />
             </SafeAreaView>
         );
     }
