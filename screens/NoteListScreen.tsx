@@ -41,7 +41,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
 
     render(): React.ReactNode {
         return (
-            <SafeAreaView style = {{flex: 1}}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView>
                     <Text style={styles.title}>{this.screenTitle}</Text>
 
@@ -50,10 +50,22 @@ export default class NoteListScreen extends React.Component<{}, any> {
                         data={this.state.notesList}
                         keyExtractor={(item: any) => item.id}
                         numColumns={2}
-                        renderItem={(item: any) => {
+                        renderItem={(item: any, index:number) => {
                             return (
-                                <NoteComponent note={item as INote} onClick={(colorHex:string) => {
-                                    this.navigation.navigate('AddEditNote', { note: item, noteColorHex: colorHex })
+                                <NoteComponent note={item as INote} onClick={(args:any) => {
+                                    console.log(args);
+                                    this.navigation.navigate('AddEditNote', {
+                                        note: item,
+                                        tag: args.tag,
+                                        noteColorHex: args.colorHex,
+                                        callBack: (updatedNote:any) => {
+                                            let updatedNoteList = [...this.state.notesList];
+                                            updatedNoteList[index] = updatedNote as INote;
+                                            this.setState({
+                                                notesList: updatedNoteList
+                                            });
+                                        }
+                                    })
                                 }} />
                             )
                         }}
@@ -64,7 +76,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
                     onClick={() => {
                         this.navigation.navigate('AddEditNote')
                     }}
-                    icon = {<Entypo name="plus" size={24} color={'white'} />}
+                    icon={<Entypo name="plus" size={24} color={'white'} />}
                     color={DefaultColors.actionButtonColor}
                 />
             </SafeAreaView>

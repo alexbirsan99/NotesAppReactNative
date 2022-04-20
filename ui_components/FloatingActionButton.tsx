@@ -34,7 +34,7 @@ export default class FloatingActionButton extends React.Component<{color?:string
 
         button: {
             //flex: 1,
-            borderRadius: 100,
+            borderRadius: 15,
             padding: 14,
             position: 'absolute',
             bottom: 20,

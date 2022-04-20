@@ -46,7 +46,7 @@ class NoteComponent extends React.Component<{note:INote, onClick?:any, marginTop
         return (
             <View style = {this.styles.container}>
                 <View style={[this.styles.card, {backgroundColor: this.state.colorHex}]}>
-                    <TouchableOpacity onPress={() => this.onClick(this.state.colorHex)}>
+                    <TouchableOpacity onPress={() => this.onClick({colorHex:this.state.colorHex, tag:this.state.tag})}>
                         {
                             this.state.note.image ?
                                 <Image

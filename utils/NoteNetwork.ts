@@ -19,6 +19,14 @@ abstract class NoteNetwork {
         }
     }
 
+    static async updateNote(note:INote) {
+        const result = await NetworkRequests.postRequest(`updateNote/id=${note.id}/`, note);
+        return {
+            note:note,
+            statusCode: result.getStatusCode()
+        }
+    }
+
 }
 
 export default NoteNetwork;

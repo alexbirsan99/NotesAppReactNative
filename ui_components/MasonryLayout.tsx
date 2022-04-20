@@ -74,7 +74,7 @@ export default class MasonryLayout extends React.Component<{ numColumns: number,
             let key = this.keyExtractor ? this.keyExtractor(value) : null;
             items.push(
                 <View key={key} style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {this.renderItem(value)}
+                    {this.renderItem(value, i)}
                 </View>
             );
         }
