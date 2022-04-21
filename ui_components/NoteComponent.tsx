@@ -4,13 +4,13 @@ import ColorNetwork from '../utils/ColorNetwork';
 import DefaultColors from '../utils/DefaultColors';
 import TagNetwork from '../utils/TagNetwork';
 
-class NoteComponent extends React.Component<{note:INote, onClick?:any, marginTop?:number}, any> {
+class NoteComponent extends React.Component<{ note: INote, onClick?: any, marginTop?: number }, any> {
 
 
-    onClick:any = () => { };
+    onClick: any = () => { };
 
 
-    constructor(props:{note:INote, onClick?:any, marginTop?:number}) {
+    constructor(props: { note: INote, onClick?: any, marginTop?: number }) {
         super(props);
         this.state = {
             note: props.note,
@@ -44,9 +44,9 @@ class NoteComponent extends React.Component<{note:INote, onClick?:any, marginTop
 
 
         return (
-            <View style = {this.styles.container}>
-                <View style={[this.styles.card, {backgroundColor: this.state.colorHex}]}>
-                    <TouchableOpacity onPress={() => this.onClick({colorHex:this.state.colorHex, tag:this.state.tag})}>
+            <View style={this.styles.container}>
+                <View style={[this.styles.card, { backgroundColor: this.state.colorHex }]}>
+                    <TouchableOpacity onPress={() => this.onClick({ colorHex: this.state.colorHex, tag: this.state.tag })}>
                         {
                             this.state.note.image ?
                                 <Image
@@ -57,10 +57,13 @@ class NoteComponent extends React.Component<{note:INote, onClick?:any, marginTop
                                 /> : null
                         }
                         <View style={this.styles.cardBody}>
-                            <Text style={this.styles.cardTitle}>{this.state.note.title}</Text>
-                            <Text>{this.state.tag.name}</Text>
-                            <Text>{this.state.note.description}</Text>
+                            <Text style={[this.styles.cardTitle, {color: this.state.tag.id ? 'white' : 'black'}]}>{this.state.note.title}</Text>
+                            {this.state.note.description? <Text style = {[this.styles.cardDescription, {color: this.state.tag.id ? 'white' : 'black'}]}>{this.state.note.description}</Text> : null}
                         </View>
+
+                        {this.state.tag.id? <View style={[this.styles.tag]}>
+                            <Text style = {[this.styles.tagText]}>{this.state.tag.name}</Text>
+                        </View>: null}
                     </TouchableOpacity>
                 </View>
             </View>
@@ -70,44 +73,64 @@ class NoteComponent extends React.Component<{note:INote, onClick?:any, marginTop
     styles = StyleSheet.create({
 
         container: {
-            flex: 1, 
-            flexWrap: 'wrap', 
-            paddingTop:8,
-            paddingBottom:8,
-            paddingLeft:16,
-            paddingRight:16
+            flex: 1,
+            flexWrap: 'wrap',
+            paddingTop: 8,
+            paddingBottom: 8,
+            paddingLeft: 16,
+            paddingRight: 16
         },
 
         container2: {
-            flex: 1, 
-            flexWrap: 'wrap', 
+            flex: 1,
+            flexWrap: 'wrap',
             margin: 8,
-            marginTop:this.props.marginTop,
+            marginTop: this.props.marginTop,
             flexShrink: 1
         },
 
         card: {
             elevation: 20,
-            borderRadius: 10,
+            borderRadius: 15,
             width: '100%'
         },
 
         cardTitle: {
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: "600"
         },
 
+        cardDescription : {
+            marginTop: 8
+        },
+
         cardBody: {
-            padding: 16
+            padding: 16,
+            paddingBottom: 12
         },
 
         cardImage: {
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
+            borderRadius: 15,
             height: undefined,
             width: '100%',
             resizeMode: 'contain',
             aspectRatio: 1
+        },
+
+        tag: {
+            margin: 16,
+            marginTop: 0,
+            flexDirection: 'row'
+        },
+
+        tagText: {
+            color: DefaultColors.neutralColorDark,
+            borderColor: DefaultColors.neutralColorDark,
+            borderWidth: 1.2,
+            flexShrink: 1,
+            padding: 4,
+            borderRadius: 10,
+            fontSize: 12
         }
     });
 

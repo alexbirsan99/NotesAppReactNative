@@ -8,11 +8,14 @@ import DefaultColors from '../utils/DefaultColors';
 import NetworkRequests from '../utils/NetworkRequests';
 import NoteNetwork from '../utils/NoteNetwork';
 
+
+import ImageView from 'react-native-image-viewing';
+
 export default class AddEditNoteScreen extends React.Component<{}, any> {
 
     note: INote = {} as INote;
 
-    tag:ITag = {} as ITag;
+    tag: ITag = {} as ITag;
 
     navigation: any;
 
@@ -31,7 +34,8 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
         props.route.params && props.route.params.noteColorHex ? this.noteColorHex = props.route.params.noteColorHex : null;
 
         this.state = {
-            actionMenuOpened: false
+            actionMenuOpened: false,
+            imageViewerOpened: false
         };
 
         this.buildActionMenu();
@@ -59,14 +63,16 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
     buildImageView() {
         return (
-            <View style={styles.imageContainer}>
-                <Image
-                    style={styles.image}
-                    source={{
-                        uri: this.note.image
-                    }}
-                />
-            </View>
+            <TouchableOpacity onPress={() => this.setState({ imageViewerOpened: true })}>
+                <View style={styles.imageContainer}>
+                    <Image
+                        style={styles.image}
+                        source={{
+                            uri: this.note.image
+                        }}
+                    />
+                </View>
+            </TouchableOpacity>
         )
     }
 
@@ -74,13 +80,23 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
         this.actionMenu = <ActionMenuNoteScreen />;
     }
 
+    buildImageViewer() {
+        return (
+            <ImageView
+                images={[{ uri: this.note.image }]}
+                imageIndex={0}
+                visible={this.state.imageViewerOpened === true}
+                onRequestClose={() => this.setState({ imageViewerOpened: false })}
+            />
+        );
+    }
+
     render(): React.ReactNode {
         return (
             <SafeAreaView style={styles.container}>
-
                 <View style={styles.topActions}>
 
-                    <View style = {[styles.topActions, {flex: 3}]}>
+                    <View style={[styles.topActions, { flex: 3 }]}>
                         <TouchableOpacity onPress={() => this.navigation.goBack()}>
                             <View style={styles.topActions}>
                                 <Feather name="chevron-left" size={33} color="black" />
@@ -89,13 +105,13 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                         </TouchableOpacity>
                     </View>
 
-                    <View style = {[styles.tagTitleContainer, {flex: 10}]}>
+                    <View style={[styles.tagTitleContainer, { flex: 10 }]}>
                         <View style={styles.topActions}>
-                            <Text style = {styles.tagTitle}>{this.tag.name}</Text>
+                            <Text style={styles.tagTitle}>{this.tag.name}</Text>
                         </View>
                     </View>
 
-                    <View style = {[styles.topActions, {flex: 3}]}>
+                    <View style={[styles.topActions, { flex: 3 }]}>
                         <TouchableOpacity style={styles.topActions} onPress={
                             () => {
                                 this.setState({
@@ -135,6 +151,9 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                     icon={<Feather name="edit-3" size={24} color="white" />}
                     color={'black'}
                 />
+
+
+                {this.buildImageViewer()}
             </SafeAreaView>
         );
     }
