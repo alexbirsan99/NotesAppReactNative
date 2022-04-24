@@ -58,7 +58,12 @@ export default class NoteListScreen extends React.Component<{}, any> {
                                         note: item,
                                         tag: args.tag,
                                         noteColorHex: args.colorHex,
-                                        callBack: (updatedNote:any) => {
+                                        deleteCallBack: (deletedNote:any) => {
+                                            this.setState({
+                                                notesList: this.state.notesList.filter((element:INote) =>  element.id !== deletedNote.id)
+                                            })
+                                        },
+                                        updateAddCallBack: (updatedNote:any) => {
                                             let updatedNoteList = [...this.state.notesList];
                                             updatedNoteList[index] = updatedNote as INote;
                                             this.setState({
@@ -74,7 +79,13 @@ export default class NoteListScreen extends React.Component<{}, any> {
 
                 <FloatingActionButton
                     onClick={() => {
-                        this.navigation.navigate('AddEditNote')
+                        this.navigation.navigate('AddEditNote', {
+                            updateAddCallBack: (note:INote) => {
+                                this.setState({
+                                    notesList: this.state.notesList.push(note)
+                                })
+                            }
+                        })
                     }}
                     icon={<Entypo name="plus" size={24} color={'white'} />}
                     color={DefaultColors.confirmColor}

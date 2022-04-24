@@ -4,13 +4,14 @@ import ColorNetwork from '../utils/ColorNetwork';
 import DefaultColors from '../utils/DefaultColors';
 import TagNetwork from '../utils/TagNetwork';
 
-class NoteComponent extends React.Component<{ note: INote, onClick?: any, marginTop?: number }, any> {
+class NoteComponent extends React.Component<{ note: INote, onClick?: any, marginTop?: number}, any> {
 
 
     onClick: any = () => { };
 
 
-    constructor(props: { note: INote, onClick?: any, marginTop?: number }) {
+
+    constructor(props: { note: INote, onClick?: any, marginTop?: number}) {
         super(props);
         this.state = {
             note: props.note,
@@ -46,7 +47,7 @@ class NoteComponent extends React.Component<{ note: INote, onClick?: any, margin
         return (
             <View style={this.styles.container}>
                 <View style={[this.styles.card, { backgroundColor: this.state.colorHex }]}>
-                    <TouchableOpacity onPress={() => this.onClick({ colorHex: this.state.colorHex, tag: this.state.tag })}>
+                    <TouchableOpacity onPress={() => this.onClick({ colorHex: this.state.tag.id ? this.state.colorHex : DefaultColors.blackColor, tag: this.state.tag})}>
                         {
                             this.state.note.image ?
                                 <Image

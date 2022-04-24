@@ -18,13 +18,17 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
     navigation: any;
 
-    callBack?: Function;
+    updateAddCallBack?: Function;
+
+    deleteCallBack:Function;
 
     constructor(props: any) {
         super(props);
         this.navigation = props.navigation;
-        this.callBack = props.route.params.callBack;
-        props.route.params && props.route.params.note ? this.note = props.route.params.note : this.createEmptyNote()
+        this.updateAddCallBack = props.route.params.updateAddCallBack;
+        this.deleteCallBack = props.route.params.deleteCallBack;
+
+        props.route.params && props.route.params.note ? this.note = props.route.params.note : this.note = this.createEmptyNote();
 
         this.state = {
             actionMenuOpened: false,
@@ -39,7 +43,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
     createEmptyNote(): INote {
         return {
-            id: '',
+            id: null,
             title: 'New note',
             description: '',
             modifyDate: new Date().toISOString(),
@@ -77,6 +81,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
     buildActionMenu() {
         return (
             <ActionMenuNoteScreen
+                note={this.note}
                 selectedTag={this.state.tag}
                 onSelectTag={
                     (selectedTag: ITag, tagColor: string) => {
@@ -94,6 +99,10 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                     });
                     this.note.image = image;
                 }} 
+                onDeleteNote = {
+                    this.deleteCallBack
+                }
+                goBack = {this.navigation.goBack}
             />
         );
     }
@@ -164,7 +173,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                             this.note.image = '';
                             NoteNetwork.insertNote(this.note);
                         }
-                        this.callBack ? this.callBack(this.note) : null;
+                        this.updateAddCallBack ? this.updateAddCallBack(this.note) : null;
                         this.navigation.goBack();
                     }}
                     icon={<Feather name="edit-3" size={24} color="white" />}

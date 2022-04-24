@@ -26,6 +26,15 @@ abstract class NetworkRequests {
         return new NetworkRequestResult(result.status, resultJSON);
     }
 
+
+    static async deleteRequest(URL: string): Promise<NetworkRequestResult> {
+        let result = await fetch(this.BASE_URL + URL, {
+            method: 'DELETE'
+        });
+        const resultJSON = await result.json();
+        return new NetworkRequestResult(result.status, resultJSON);
+    }
+
 }
 
 export default NetworkRequests;

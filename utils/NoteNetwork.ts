@@ -27,6 +27,14 @@ abstract class NoteNetwork {
         }
     }
 
+
+    static async deleteNote(note:INote) {
+        const result = await NetworkRequests.deleteRequest(`deleteNote/id=${note.id}/`);
+        return {
+            statusCode: result.getStatusCode()
+        }
+    }
+
 }
 
 export default NoteNetwork;

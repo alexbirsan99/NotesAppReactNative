@@ -4,21 +4,31 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DefaultColors from "../utils/DefaultColors";
 import * as ImagePicker from 'expo-image-picker';
 import SelectTagModal from "./SelectTagModal";
+import NoteNetwork from "../utils/NoteNetwork";
 
-export default class ActionMenuNoteScreen extends React.Component<{ onImagePicked: any, selectedTag?:ITag, onSelectTag:any }, any> {
+export default class ActionMenuNoteScreen extends React.Component<{ goBack?: Function, onImagePicked: any, selectedTag?: ITag, note: INote, onSelectTag: any, onDeleteNote: Function }, any> {
 
     onImagePicked: Function = () => { };
 
-    onSelectTag:Function = () => {};
+    onSelectTag: Function = () => { };
 
-    constructor(props: { onImagePicked: any, selectedTag?:ITag, onSelectTag:any }) {
+    onDeleteNote: Function;
+
+    note: INote;
+
+    goBack?: Function;
+
+    constructor(props: { goBack?: Function, onImagePicked: any, selectedTag?: ITag, note: INote, onSelectTag: any, onDeleteNote: Function }) {
         super(props);
         this.state = {
             tagModal: false,
             selectedTag: props.selectedTag
         };
+        this.note = props.note;
         this.onImagePicked = props.onImagePicked;
-        this.onSelectTag= props.onSelectTag;
+        this.onSelectTag = props.onSelectTag;
+        this.onDeleteNote = props.onDeleteNote;
+        this.goBack = props.goBack;
         this.buildTagModal();
     }
 
@@ -36,12 +46,28 @@ export default class ActionMenuNoteScreen extends React.Component<{ onImagePicke
     }
 
     buildTagModal() {
-        return(
+        return (
             <SelectTagModal onSelectTag={this.onSelectTag} toggleVisibility={() => {
                 this.setState({
                     tagModal: false
                 });
-            }} selectedTag = {this.state.selectedTag}/>
+            }} selectedTag={this.state.selectedTag} />
+        );
+    }
+
+
+    buildDeleteNotebutton() {
+        return (
+            <TouchableOpacity onPress={() => {
+                NoteNetwork.deleteNote(this.note);
+                this.onDeleteNote(this.note);
+                this.goBack ? this.goBack() : null;
+            }}>
+                <View style={[styles.actionDelete, { marginTop: 8 }]}>
+                    <Feather name="trash-2" size={24} color="white" />
+                    <Text style={styles.actionTextDelete}>Delete note</Text>
+                </View>
+            </TouchableOpacity>
         );
     }
 
@@ -75,12 +101,7 @@ export default class ActionMenuNoteScreen extends React.Component<{ onImagePicke
 
 
 
-                <TouchableOpacity>
-                    <View style={[styles.actionDelete, { marginTop: 8 }]}>
-                        <Feather name="trash-2" size={24} color="white" />
-                        <Text style={styles.actionTextDelete}>Delete note</Text>
-                    </View>
-                </TouchableOpacity>
+                {this.note.id && this.buildDeleteNotebutton()}
             </View>
         )
     }
