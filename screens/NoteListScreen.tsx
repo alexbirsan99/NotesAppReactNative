@@ -77,7 +77,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
                         this.navigation.navigate('AddEditNote')
                     }}
                     icon={<Entypo name="plus" size={24} color={'white'} />}
-                    color={DefaultColors.actionButtonColor}
+                    color={DefaultColors.confirmColor}
                 />
             </SafeAreaView>
         );

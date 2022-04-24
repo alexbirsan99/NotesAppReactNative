@@ -10,39 +10,35 @@ import NoteNetwork from '../utils/NoteNetwork';
 
 
 import ImageView from 'react-native-image-viewing';
+import SelectTagModal from '../ui_components/SelectTagModal';
 
 export default class AddEditNoteScreen extends React.Component<{}, any> {
 
-    note: INote = {} as INote;
-
-    tag: ITag = {} as ITag;
+    note = {} as INote;
 
     navigation: any;
 
-    noteColorHex?: string;
-
     callBack?: Function;
-
-    actionMenu?: JSX.Element;
 
     constructor(props: any) {
         super(props);
         this.navigation = props.navigation;
         this.callBack = props.route.params.callBack;
-        props.route.params && props.route.params.note ? this.note = props.route.params.note : this.createEmptyNote();
-        props.route.params && props.route.params.tag ? this.tag = props.route.params.tag : this.createEmptyTag();
-        props.route.params && props.route.params.noteColorHex ? this.noteColorHex = props.route.params.noteColorHex : null;
+        props.route.params && props.route.params.note ? this.note = props.route.params.note : this.createEmptyNote()
 
         this.state = {
             actionMenuOpened: false,
-            imageViewerOpened: false
+            imageViewerOpened: false,
+            noteImage: this.note.image,
+            tag: props.route.params && props.route.params.tag ? props.route.params.tag : this.createEmptyTag(),
+            tagColor: props.route.params && props.route.params.noteColorHex ? props.route.params.noteColorHex : null
         };
 
         this.buildActionMenu();
     }
 
-    createEmptyNote() {
-        this.note = {
+    createEmptyNote(): INote {
+        return {
             id: '',
             title: 'New note',
             description: '',
@@ -53,12 +49,14 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
         }
     }
 
-    createEmptyTag() {
-        this.tag = {
-            id: '',
-            colorID: '',
-            name: ''
-        }
+    createEmptyTag(): ITag {
+        return (
+            {
+                id: '',
+                colorID: '',
+                name: ''
+            }
+        );
     }
 
     buildImageView() {
@@ -68,7 +66,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                     <Image
                         style={styles.image}
                         source={{
-                            uri: this.note.image
+                            uri: this.state.noteImage
                         }}
                     />
                 </View>
@@ -77,13 +75,33 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
     }
 
     buildActionMenu() {
-        this.actionMenu = <ActionMenuNoteScreen />;
+        return (
+            <ActionMenuNoteScreen
+                selectedTag={this.state.tag}
+                onSelectTag={
+                    (selectedTag: ITag, tagColor: string) => {
+                        this.setState({
+                            tag: selectedTag,
+                            tagColor: tagColor,
+                            actionMenuOpened: false
+                        });
+                    }
+                }
+                onImagePicked={(image: string) => {
+                    this.setState({
+                        noteImage: image,
+                        actionMenuOpened: false
+                    });
+                    this.note.image = image;
+                }} 
+            />
+        );
     }
 
     buildImageViewer() {
         return (
             <ImageView
-                images={[{ uri: this.note.image }]}
+                images={[{ uri: this.state.noteImage }]}
                 imageIndex={0}
                 visible={this.state.imageViewerOpened === true}
                 onRequestClose={() => this.setState({ imageViewerOpened: false })}
@@ -94,6 +112,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
     render(): React.ReactNode {
         return (
             <SafeAreaView style={styles.container}>
+
                 <View style={styles.topActions}>
 
                     <View style={[styles.topActions, { flex: 3 }]}>
@@ -107,7 +126,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
                     <View style={[styles.tagTitleContainer, { flex: 10 }]}>
                         <View style={styles.topActions}>
-                            <Text style={styles.tagTitle}>{this.tag.name}</Text>
+                            <Text style={styles.tagTitle}>{this.state.tag.name}</Text>
                         </View>
                     </View>
 
@@ -127,13 +146,13 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
 
                 {this.note.image ? this.buildImageView() : null}
-                {this.state.actionMenuOpened && this.actionMenu}
+                {this.state.actionMenuOpened && this.buildActionMenu()}
 
 
 
                 <View style={styles.screenContent}>
-                    <TextInput onChangeText={(text) => this.note.title = text} style={[styles.title, { color: this.noteColorHex }]}>{this.note.title}</TextInput>
-                    <TextInput onChangeText={(text) => this.note.description = text} style={[styles.body, { color: this.noteColorHex }]} multiline={true} placeholder="Note description...">{this.note.description}</TextInput>
+                    <TextInput onChangeText={(text) => this.note.title = text} style={[styles.title, { color: this.state.tagColor }]}>{this.note.title}</TextInput>
+                    <TextInput onChangeText={(text) => this.note.description = text} style={[styles.body, { color: this.state.tagColor }]} multiline={true} placeholder="Note description...">{this.note.description}</TextInput>
                 </View>
 
 

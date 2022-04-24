@@ -5,6 +5,7 @@ abstract class DefaultColors {
     static neutralColorLight = '#f5f5f5';
     static neutralColorDark = '#dee2e6';
     static redColorDark = '#bd1f36';
+    static confirmColor = '#5390d9';
 }
 
 

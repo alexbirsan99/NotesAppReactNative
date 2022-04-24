@@ -21,8 +21,6 @@ abstract class ColorNetwork {
         if(this.#colors.length == 0) {
             await this.getAllColors();
         }
-
-
         return this.#colors.filter(element => element.id.replace(/-/g, '') === colorID)[0];
     }
 }

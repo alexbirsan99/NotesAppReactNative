@@ -113,7 +113,6 @@ class NoteComponent extends React.Component<{ note: INote, onClick?: any, margin
             borderRadius: 15,
             height: undefined,
             width: '100%',
-            resizeMode: 'contain',
             aspectRatio: 1
         },
 
