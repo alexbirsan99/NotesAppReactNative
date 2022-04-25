@@ -6,6 +6,7 @@ The **Notes API** (see the Notes API repository) and also **Masonry Layout** was
 The app has the following features
 - Masonry Layout
 - Add note
+- Delete a note
 - Edit the features of a note (tag, image, title, description)
 - Filter notes by description and title
 - Change note image by selecting an image from your gallery
