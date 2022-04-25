@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NoteNetwork from '../utils/NoteNetwork';
 import NoteComponent from '../ui_components/NoteComponent';
@@ -8,6 +8,8 @@ import MasonryLayout from '../ui_components/MasonryLayout';
 import FloatingActionButton from '../ui_components/FloatingActionButton';
 import DefaultColors from '../utils/DefaultColors';
 import Entypo from '@expo/vector-icons/build/Entypo';
+import { Ionicons } from '@expo/vector-icons';
+import NetworkRequestResult from '../objects/RequestResult';
 
 
 export default class NoteListScreen extends React.Component<{}, any> {
@@ -24,7 +26,7 @@ export default class NoteListScreen extends React.Component<{}, any> {
         };
         this.navigation = props.navigation;
         this.getNoteList();
-        this.screenTitle = "Noteifyou"
+        this.screenTitle = "Noteify"
     }
 
     getNoteList = () => {
@@ -45,6 +47,19 @@ export default class NoteListScreen extends React.Component<{}, any> {
                 <ScrollView>
                     <Text style={styles.title}>{this.screenTitle}</Text>
 
+                    
+                    <View style = {styles.searchBar}>
+                        <Ionicons style = {styles.searchIcon} name="ios-search-sharp" size={24} color={'#6c757d'} />
+                        <TextInput style = {{flex: 1}} placeholder='Search...' onSubmitEditing = {(filterSearch) => {
+                            NoteNetwork.filterNotes(filterSearch.nativeEvent.text).then((result) => {
+                                if(result.statusCode === 200) {
+                                    this.setState({
+                                        notesList: result.notes
+                                    })
+                                }
+                            });
+                        }} />
+                    </View>
 
                     <MasonryLayout
                         data={this.state.notesList}
@@ -111,5 +126,20 @@ const styles = StyleSheet.create({
         paddingRight: 16,
         fontSize: 30,
         fontWeight: '700'
+    },
+    searchBar: {
+        margin: 16,
+        marginTop: 0,
+        marginBottom: 16,
+        height: 50,
+        borderRadius: 30,
+        flexDirection: 'row',
+        backgroundColor: DefaultColors.neutralColorMid
+    },
+
+    searchIcon: {
+        alignSelf: 'center',
+        marginLeft: 16,
+        marginRight: 8
     }
 })

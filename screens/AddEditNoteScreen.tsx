@@ -43,7 +43,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
     createEmptyNote(): INote {
         return {
-            id: null,
+            id: null as unknown as string,
             title: 'New note',
             description: '',
             modifyDate: new Date().toISOString(),
@@ -161,7 +161,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
 
                 <View style={styles.screenContent}>
                     <TextInput onChangeText={(text) => this.note.title = text} style={[styles.title, { color: this.state.tagColor }]}>{this.note.title}</TextInput>
-                    <TextInput onChangeText={(text) => this.note.description = text} style={[styles.body, { color: this.state.tagColor }]} multiline={true} placeholder="Note description...">{this.note.description}</TextInput>
+                    <TextInput onChangeText={(text) => this.note.description = text} style={[styles.body, { color: this.state.tagColor}]} multiline={true} placeholder="Note description...">{this.note.description}</TextInput>
                 </View>
 
 
@@ -177,7 +177,7 @@ export default class AddEditNoteScreen extends React.Component<{}, any> {
                         this.navigation.goBack();
                     }}
                     icon={<Feather name="edit-3" size={24} color="white" />}
-                    color={'black'}
+                    color={this.state.tagColor}
                 />
 
 

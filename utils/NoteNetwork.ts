@@ -27,10 +27,18 @@ abstract class NoteNetwork {
         }
     }
 
-
     static async deleteNote(note:INote) {
         const result = await NetworkRequests.deleteRequest(`deleteNote/id=${note.id}/`);
         return {
+            statusCode: result.getStatusCode()
+        }
+    }
+
+    static async filterNotes(filter:string) {
+        const result = await NetworkRequests.getRequest(`filterNote/filterSearch=${filter}/`);
+        const notes:INote[] = result.getJson() as INote[];
+        return {
+            notes: notes,
             statusCode: result.getStatusCode()
         }
     }
