@@ -1,7 +1,7 @@
 # NotesAppReactNative
 Notes Mobile App made with React Native using Notes API.
 
-The **Notes API** (see the Notes API repository) and also **Masonry Layout** was made from scratch.
+The **Notes API** (see the Notes API repository) and **Masonry Layout** was made from scratch.
 
 The app has the following features
 - Masonry Layout
