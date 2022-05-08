@@ -1,4 +1,4 @@
-# NotesAppReactNative
+# Noteify Mobile App
 Notes Mobile App made with React Native using Notes API.
 
 The **Notes API** (see the Notes API repository) and **Masonry Layout** was made from scratch.
